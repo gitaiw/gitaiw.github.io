@@ -4,7 +4,7 @@
   "description": "Enjoys writing articles and interacting on the internet.",
   "lang": "id-ID",
   "start_url": "https://www.aiw.boo/",
-  "scope": "/",
+  "scope": "https://www.aiw.boo/",
   "display": "standalone",
   "orientation": "any",
   "background_color": "#060707",
