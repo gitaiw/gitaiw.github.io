@@ -296,7 +296,7 @@ img {
   /* Display caps */
   --display-caps-font-family: var(--font-secondary);
   --display-caps-max-font-size: 144;
-  --display-caps-min-font-size: 48;
+  --display-caps-min-font-size: 32;
   --display-caps-font-weight: 200;
   --display-caps-line-height: 1.2;
   --display-caps-letter-spacing: 0.06em;
