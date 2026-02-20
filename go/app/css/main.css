@@ -17,6 +17,7 @@ body {
   background: #f6f5fa;
   color: #000;
   overflow: hidden;
+  overflow-y: auto;
 }
 
 /* ================= MENU BUTTON ================= */
