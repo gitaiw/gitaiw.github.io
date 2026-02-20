@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+    />
+    <title>Example App Chat | Dev Aiw</title>
+    <meta
+      name="description"
+      content="Demo example Chat. This responsive design All devices."
+    />
+    <meta content="telephone=no" name="format-detection"/>
+    <meta name="HandheldFriendly" content="true"/>
+    <link rel="apple-touch-icon" sizes="57x57" href="app/img/favicon/apple-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="app/img/favicon/apple-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="app/img/favicon/apple-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="app/img/favicon/apple-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="app/img/favicon/apple-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="app/img/favicon/apple-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="app/img/favicon/apple-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="app/img/favicon/apple-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="app/img/favicon/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="192x192" href="app/img/favicon/android-icon-192x192.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="app/img/favicon/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="96x96" href="app/img/favicon/favicon-96x96.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="app/img/favicon/favicon-16x16.png" />
+    <meta name="theme-color" content="#f6f5fa" />
+    <link rel="stylesheet" href="./app/css/main.css" />
+  </head>
+  <body class="anim_fadein">
+    <div class="overlay" id="overlay"></div>
+
+    <div class="sidebar" id="sidebar">
+      <h2>Demo Chat</h2>
+      <div class="new-chat" onclick="newChat()">
+        <img src="./app/img/add_chat.svg" alt="New Chat" class="img-new-chat" />New Chat</div>
+      <div class="chat-list" id="chatList"></div>
+      <div class="sidebar-footer">© 2026 | <a href="https://aiw.boo/">aiw.boo</a></div>
+    </div>
+
+    <div class="main" id="main">
+      <div class="menu-btn" id="menuBtn"><span></span><span></span></div>
+      <div class="header">
+        <img src="./app/img/logo/aiw-dark.svg" alt="Logo" class="logo" />
+        <!--div class="chat-title" id="headerChatTitle">Chat 1</div-->
+        <button id="bt-h-login" class="bt-h-login">Login</button>
+      </div>
+      <div class="chat-container" id="chatContainer"></div>
+      <div class="input-area">
+        <div class="u-w">
+          <button id="plusBtn" class="bt-plus">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              height="24px"
+              viewBox="0 -960 960 960"
+              width="24px"
+              fill="#000000"
+            >
+              <path
+                d="M440-440H200v-80h240v-240h80v240h240v80H520v240h-80v-240Z"
+              />
+            </svg>
+          </button>
+          <div id="uMenu" class="u-m">
+            <button id="cameraBtn">
+              <img src="./app/img/add_camera.svg" alt="Add Images" class="add-camera" />
+              kamera
+            </button>
+            <button id="imageBtn">
+              <img src="./app/img/add_img.svg" alt="Add Images" class="add-img" />
+              images
+            </button>
+            <button id="fileBtn">
+              <img src="./app/img/add_files.svg" alt="Add Files" class="add-files" />
+              files
+            </button>
+          </div>
+        </div>
+        <input type="file" accept="image/*" capture="environment" id="cameraInput" hidden />
+        <input type="file" id="imageInput" accept="image/*" hidden />
+        <input
+          type="file"
+          id="fileInput"
+          accept=".pdf,.doc,.docx,.txt,.xls,.xlsx"
+          hidden
+        />
+        <textarea
+          id="userInput"
+          placeholder="Ketik pesan..."
+          rows="3"
+        ></textarea>
+        <button id="voiceBtn" class="bt-voice" title="Voice Input">
+          <img src="./app/img/add_voice.svg" alt="Add Voice" class="add-voice" />
+          <img src="./app/img/click-stop.svg" alt="Stop Voice" class="stop-voice" />
+
+        </button>
+        <button class="bt-send" onclick="sendMessage()">Kirim</button>
+      </div>
+    </div>
+<script src="./app/js/util.js"></script>
+<script src="./app/js/chat.js"></script>
+<script src="./app/js/upload.js"></script>
+<script src="./app/js/plus.js"></script>
+<script src="./app/js/voice.js"></script>
+<script src="./app/js/input.js"></script>
+<script src="./app/js/sidebar.js"></script>
+  </body>
+</html>
