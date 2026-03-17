@@ -1,0 +1,207 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Animasi Teks Marquee Kiri dan Kanan</title>
+
+<style>
+  body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: red;
+    color: #fff;
+  }
+
+  ._marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 1px solid #fff;
+    border-bottom: 1px solid #fff;
+    padding: 20px 0;
+    position: relative;
+  }
+
+  ._marquee__inner {
+    display: inline-flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  ._marquee__inner span {
+    margin-right: 20px;
+    font-size: 48px;
+    font-weight: bold;
+  }
+
+  ._marquee__delimiter {
+    margin-right: 20px;
+  }
+</style>
+</head>
+
+<body>
+<main>
+<h1 style="text-align:center;font-size:2rem;padding:15px">[ Animasi Text Marquee ]</h1>
+<div class="_marquee _marquee-kiri">Left</div>
+
+<div class="_marquee _marquee-kanan">Right</div>
+</main>
+<script>
+class _marqueeWithDelimiterAlways {
+  constructor(selector, options = {}) {
+    this.elements = document.querySelectorAll(selector);
+    this.speed = options.speed || 1;
+    this.slowSpeed = options.slowSpeed || 0.3;
+    this.delimiter = options.delimiter || '/';
+    this.direction = options.direction || -1; 
+
+    this.instances = [];
+    this.handleResize = this.debounce(this.onResize.bind(this), 150);
+
+    window.addEventListener('resize', this.handleResize);
+
+    this.init();
+  }
+
+  createContent(inner, words) {
+    inner.innerHTML = '';
+
+    const spanText = document.createElement('span');
+    spanText.textContent = words.join(' ');
+
+    const spanDelimiter = document.createElement('span');
+    spanDelimiter.className = '_marquee__delimiter';
+    spanDelimiter.textContent = ' ' + this.delimiter;
+
+    inner.appendChild(spanText);
+    inner.appendChild(spanDelimiter);
+  }
+
+  init() {
+    this.elements.forEach(_marquee => {
+      const inner = document.createElement('div');
+      inner.classList.add('_marquee__inner');
+
+      const words = _marquee.textContent.trim().split(/\s+/);
+
+      this.createContent(inner, words);
+
+      _marquee.innerHTML = '';
+      _marquee.appendChild(inner);
+
+      const instance = {
+        _marquee,
+        inner,
+        words,
+        clones: [],
+        pos: 0,
+        speed: this.speed,
+        direction: this.direction,
+        rafId: null
+      };
+
+      this.buildClones(instance);
+
+      _marquee.addEventListener('mouseenter', () => {
+        instance.speed = this.slowSpeed;
+      });
+
+      _marquee.addEventListener('mouseleave', () => {
+        instance.speed = this.speed;
+      });
+
+      this.animate(instance);
+      this.instances.push(instance);
+    });
+  }
+
+  buildClones(instance) {
+    const { _marquee, inner } = instance;
+
+    instance.clones.forEach(c => c.remove());
+    instance.clones = [];
+
+    let totalWidth = inner.scrollWidth;
+    const containerWidth = _marquee.offsetWidth;
+
+    let maxClones = 20;
+
+    while (totalWidth < containerWidth * 2 && maxClones--) {
+      const clone = inner.cloneNode(true);
+      _marquee.appendChild(clone);
+      instance.clones.push(clone);
+      totalWidth += clone.scrollWidth;
+    }
+  }
+
+  animate(instance) {
+    const step = (now) => {
+      if (!document.body.contains(instance.inner)) return;
+
+      if (!instance.lastTime) instance.lastTime = now;
+
+      const delta = (now - instance.lastTime) / 16.67;
+      instance.lastTime = now;
+
+      instance.pos += instance.speed * instance.direction * delta;
+
+      const totalWidth = instance.inner.scrollWidth;
+
+      if (instance.direction === -1 && instance.pos <= -totalWidth) {
+        instance.pos += totalWidth;
+      }
+
+      if (instance.direction === 1 && instance.pos >= 0) {
+        instance.pos -= totalWidth;
+      }
+
+      const smooth = Math.round(instance.pos * 100) / 100;
+
+      [instance.inner, ...instance.clones].forEach(el => {
+        el.style.transform = `translate3d(${smooth}px,0,0)`;
+      });
+
+      instance.rafId = requestAnimationFrame(step);
+    };
+
+    instance.rafId = requestAnimationFrame(step);
+  }
+
+  onResize() {
+    this.instances.forEach(instance => {
+      instance.pos = 0;
+      this.createContent(instance.inner, instance.words);
+      this.buildClones(instance);
+    });
+  }
+
+  debounce(fn, delay) {
+    let t;
+    return (...args) => {
+      clearTimeout(t);
+      t = setTimeout(() => fn.apply(this, args), delay);
+    };
+  }
+}
+
+// kiri
+new _marqueeWithDelimiterAlways('._marquee-kiri', { 
+  speed: 0.7,
+  slowSpeed: 0.3,
+  delimiter: '/',
+  direction: -1
+});
+
+// kanan
+new _marqueeWithDelimiterAlways('._marquee-kanan', { 
+  speed: 0.7,
+  slowSpeed: 0.3,
+  delimiter: '/',
+  direction: 1
+});
+</script>
+
+</body>
+</html>
