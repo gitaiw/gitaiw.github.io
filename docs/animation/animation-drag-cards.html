@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+<title>Animation Drag Cards + Scroll Parallax</title>
+
+<style>
+body{
+  margin:0;
+  font-family:sans-serif;
+}
+
+.section{
+  height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+}
+
+.this-animasi-card{
+  background: red;
+  position:relative;
+  overflow:hidden;
+}
+
+.this-card{
+  width:200px;
+  height:200px;
+  background:white;
+  border-radius:12px;
+  box-shadow:0 20px 40px rgba(0,0,0,0.3);
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  flex-direction:column;
+  position:absolute;
+  cursor:grab;
+  user-select:none;
+  touch-action:none;
+  will-change:transform;
+}
+
+.this-card h2{
+  margin:0;
+}
+</style>
+
+</head>
+<body>
+<div class="section this-animasi-card">
+  <div class="this-card">
+    <h2>Card 1</h2>
+  </div>
+  <div class="this-card">
+    <h2>Card 2</h2>
+  </div>
+  <div class="this-card">
+    <h2>Card 3</h2>
+  </div>
+</div>
+
+<script>
+/*
+====================
+ * 
+ * Cards Drag + Parallax
+ * 
+====================
+ */
+
+document.addEventListener("DOMContentLoaded", () => {
+
+document.querySelectorAll(".this-animasi-card").forEach(parent => {
+
+  const cards = [];
+  const cardElements = parent.querySelectorAll(".this-card");
+
+  function randomPos(max){ 
+    return Math.random()*max; 
+  }
+
+  function isOverlapping(x,y,width,height,others){
+
+    for(const c of others){
+
+      const cx=parseFloat(c.el.style.left);
+      const cy=parseFloat(c.el.style.top);
+      const cw=c.el.offsetWidth;
+      const ch=c.el.offsetHeight;
+
+      if(
+        x < cx+cw+20 &&
+        x+width+20 > cx &&
+        y < cy+ch+20 &&
+        y+height+20 > cy
+      ){
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  cardElements.forEach(card => {
+
+    const cardWidth = card.offsetWidth || 200;
+    const cardHeight = card.offsetHeight || 200;
+
+    let posX,posY,attempts=0;
+    const buffer=20;
+
+    do{
+
+      const maxX = parent.clientWidth-cardWidth-buffer*2;
+      const maxY = parent.clientHeight-cardHeight-buffer*2;
+
+      posX=randomPos(maxX)+buffer;
+      posY=randomPos(maxY)+buffer;
+
+      attempts++;
+
+    }while(isOverlapping(posX,posY,cardWidth,cardHeight,cards)&&attempts<500)
+
+    card.style.left=posX+"px";
+    card.style.top=posY+"px";
+
+    const cObj={
+      el:card,
+      velocityX:0,
+      velocityY:0,
+      dragging:false,
+      offsetX:0,
+      offsetY:0
+    };
+
+    cards.push(cObj);
+
+    card.addEventListener("touchstart",(e)=>{
+      e.stopPropagation();
+    },{passive:false});
+
+    card.addEventListener("touchmove",(e)=>{
+      e.stopPropagation();
+    },{passive:false});
+
+    card.addEventListener("pointerdown",e=>{
+
+      e.stopPropagation();
+
+      cObj.dragging=true;
+      card.setPointerCapture(e.pointerId);
+
+      cObj.offsetX=e.clientX-parseFloat(card.style.left);
+      cObj.offsetY=e.clientY-parseFloat(card.style.top);
+
+      card.style.cursor="grabbing";
+    });
+
+    card.addEventListener("pointermove",e=>{
+
+      if(!cObj.dragging) return;
+
+      e.preventDefault();
+
+      let newX=e.clientX-cObj.offsetX;
+      let newY=e.clientY-cObj.offsetY;
+
+      cObj.velocityX=newX-parseFloat(card.style.left);
+      cObj.velocityY=newY-parseFloat(card.style.top);
+
+      card.style.left=newX+"px";
+      card.style.top=newY+"px";
+    });
+
+    card.addEventListener("pointerup",()=>{
+      cObj.dragging=false;
+      card.style.cursor="grab";
+    });
+
+  });
+
+  function animate(){
+
+    cards.forEach(c=>{
+
+      if(!c.dragging){
+
+        let left=parseFloat(c.el.style.left);
+        let top=parseFloat(c.el.style.top);
+
+        const maxX=parent.clientWidth-c.el.offsetWidth;
+        const maxY=parent.clientHeight-c.el.offsetHeight;
+
+        const minX=0;
+        const minY=0;
+
+        const stiffness=0.1;
+        const damping=0.7;
+
+        if(left<minX){
+
+          let force=(minX-left)*stiffness;
+          c.velocityX+=force;
+          c.velocityX*=damping;
+          left+=c.velocityX;
+
+        }else if(left>maxX){
+
+          let force=(maxX-left)*stiffness;
+          c.velocityX+=force;
+          c.velocityX*=damping;
+          left+=c.velocityX;
+
+        }else{
+
+          left+=c.velocityX;
+          c.velocityX*=0.95;
+
+        }
+
+        if(top<minY){
+
+          let force=(minY-top)*stiffness;
+          c.velocityY+=force;
+          c.velocityY*=damping;
+          top+=c.velocityY;
+
+        }else if(top>maxY){
+
+          let force=(maxY-top)*stiffness;
+          c.velocityY+=force;
+          c.velocityY*=damping;
+          top+=c.velocityY;
+
+        }else{
+
+          top+=c.velocityY;
+          c.velocityY*=0.95;
+
+        }
+
+        c.el.style.left=left+"px";
+        c.el.style.top=top+"px";
+
+      }
+
+    });
+
+    requestAnimationFrame(animate);
+
+  }
+
+  animate();
+
+});
+
+});
+
+
+let thisScrollY = window.scrollY;
+let thisTargetScroll = window.scrollY;
+
+const cards = document.querySelectorAll(".this-card");
+
+window.addEventListener("scroll", () => {
+  thisTargetScroll = window.scrollY;
+});
+
+function parallaxLoop(){
+
+  thisScrollY += (thisTargetScroll - thisScrollY) * 0.1;
+
+  cards.forEach((card, i) => {
+
+    const rect = card.getBoundingClientRect();
+
+    const speed = 0.1 + (i * 0.05);
+
+    const offset = (rect.top - window.innerHeight / 2) * speed;
+
+    const rotate = offset * 0.02;
+
+    card.style.transform =
+      `translate3d(0, ${offset}px, 0) rotate(${rotate}deg)`;
+
+  });
+
+  requestAnimationFrame(parallaxLoop);
+}
+
+parallaxLoop();
+</script>
+
+</body>
+</html>
