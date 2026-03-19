@@ -1,0 +1,324 @@
+/*
+====================
+ *
+ * style animation
+ *
+====================
+ */
+  ._marquee {
+    width: 100%;
+    overflow: hidden;
+    white-space: nowrap;
+    border-top: 1px solid var(--this-data-border-theme);
+    border-bottom: 1px solid var(--this-data-border-theme);
+    padding: 15px 0;
+    position: relative;
+  }
+
+  ._marquee__inner {
+    display: inline-flex;
+    white-space: nowrap;
+    will-change: transform;
+  }
+
+  ._marquee__inner span {
+    margin-right: 20px;
+    font-size: 48px;
+    font-weight: bold;
+  }
+
+  ._marquee__delimiter {
+    margin-right: 20px;
+  }
+
+#c-love {
+    display: block;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: auto;
+}
+
+/* =========================
+   ANIM BORDER
+========================= */
+
+.animasi-border-bottom {
+    position: relative;
+    display: inline-block;
+    padding-bottom: 5px;
+    margin: 40px 0;
+}
+
+.animasi-border-bottom::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 2px;
+    width: 0;
+    transition: width .8s ease;
+}
+
+.animasi-border-bottom.active::after {
+    width: 100%;
+}
+
+.animasi-border-bottom.active::after{
+  background: var(--this-data-color-theme);
+}
+/* =========================
+   ANIM LETTER
+========================= */
+
+.this-animation-text-loncat-dari-atas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    color: white;
+    border-bottom: 1px solid black;
+}
+
+.letters {
+    position: absolute;
+    inset: 0;
+    pointer-events: none
+    visibility: hidden;
+}
+.letter {
+    position: absolute;
+    font-weight: bold;
+    user-select: none;
+    transform-origin: center;
+    font-size: clamp(60vw, 10vw + 2vh, 60vw);
+    font-family: var(--font-1);
+    line-height: 0.6;
+    margin: 0;
+    padding: 0;
+    font-weight: bold;
+    will-change: transform;
+}
+
+.letters .letter:nth-child(1) {
+    color: var(--this-data-color-theme);
+}
+.letters .letter:nth-child(2) {
+    color: var(--this-data-color-theme);
+}
+.letters .letter:nth-child(3) {
+    color: var(--this-data-color-theme);
+}
+
+.split___text {
+    overflow: hidden;
+}
+
+.line {
+    display: block;
+    overflow: hidden;
+}
+
+.split___text * {
+    will-change: transform;
+}
+
+.heading,
+.split___text {
+    opacity: 0;
+}
+
+.lineParent {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.35em;
+    margin-bottom: -0.35em;
+}
+
+/* =========================
+   ANIM CHAR 01
+========================= */
+
+.agl_split-heading-01 span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(50px) scale(0.9);
+    filter: blur(2px);
+    transition: transform 0.8s cubic-bezier(0.22,1,0.36,1),
+    opacity 0.8s cubic-bezier(0.22,1,0.36,1),
+    filter 0.8s cubic-bezier(0.22,1,0.36,1);
+}
+
+.agl_split-heading-01.animate span {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    filter: blur(0);
+}
+
+.agl_split-heading-01.animate-out span {
+    opacity: 0;
+    transform: translateY(-50px) scale(0.9);
+    filter: blur(1px);
+}
+
+/* =========================
+   ANIM CHAR 02
+========================= */
+
+.agl_split-heading-02 span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(40px);
+    filter: blur(1px);
+}
+
+.agl_split-heading-02.animUp span {
+    animation: slideUp 0.8s forwards cubic-bezier(0.22,1,0.36,1);
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(40px);
+        filter: blur(1px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+        filter: blur(0);
+    }
+}
+
+.agl_split-heading-02.animOut span {
+    animation: textOut 1s ease forwards;
+}
+
+@keyframes textOut {
+    from {
+        transform: translateY(0);
+        opacity: 1;
+    }
+    to {
+        transform: translateY(var(--offsetY));
+        opacity: 0;
+    }
+}
+
+/* =========================
+   SPLITE
+========================= */
+
+[data-animate] {
+    opacity: 0;
+}
+
+.agl-slide-up-lines {
+    opacity: 0;
+}
+
+.agl-slide-up-lines.text-is-ready {
+    opacity: 1;
+}
+
+.xxxlane {
+    opacity: 0;
+    transform: translateY(10px);
+    transition: transform 0.8s cubic-bezier(.2,.65,.3,1), opacity 0.8s;
+    will-change: transform;
+}
+
+.xxxlane.text-is-visible {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.animasi-fadein-slide {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: fadeInSlide 0.8s forwards;
+    animation-timing-function: ease-out;
+}
+
+@keyframes fadeInSlide {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.this-fade-in {
+    opacity: 0;
+    animation: thisFadeIn 0.8s ease-out forwards;
+}
+
+@keyframes thisFadeIn {
+    from {
+        opacity: 0;
+    }
+    to {
+        opacity: 1;
+    }
+}
+
+/* =========================
+   REVEAL
+========================= */
+.color-reveal {
+  white-space: nowrap;
+}
+
+.color-reveal span {
+    display: inline-block;
+
+    color: transparent;
+
+    transition: color .35s ease;
+
+    transition-delay: calc(var(--i) * 0.02s);
+}
+
+.color-reveal.animate span {
+    color: var(--this-data-color-theme);
+}
+
+.color-reveal.no-transition span {
+    transition: none !important;
+}
+
+.css-slide-up {
+    opacity: 0;
+    transform: translateY(20px);
+    animation: ccsSlideUp 0.6s ease-out forwards;
+}
+
+.css-slide-up:nth-child(1) {
+    animation-delay: 1s;
+}
+.css-slide-up:nth-child(2) {
+    animation-delay: 1.19s;
+}
+.css-slide-up:nth-child(3) {
+    animation-delay: 1.3s;
+}
+
+@keyframes ccsSlideUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* =========================
+   MEDIA
+========================= */
+
+@media (min-width: 768px) {
+    .letter {
+        font-size: clamp(36vw, 5vw + 2vh, 36vw);
+    }
+}

@@ -1,0 +1,219 @@
+/* =========================
+   FONTS
+========================= */
+
+@font-face {
+    font-family: 'Flaviotte';
+    src: url('../fonts/Flaviotte.woff2') format('woff2'),
+    url('../fonts/Flaviotte.otf') format('opentype');
+    font-style: normal;
+    font-weight: 700;
+    text-rendering: optimizeLegibility;
+}
+
+@font-face {
+    font-family: 'Galgo';
+    src: url('../fonts/GalgoVF.woff') format('woff2'),
+    url('../fonts/GalgoVF.ttf') format('opentype');
+    font-style: normal;
+    font-weight: 700;
+    text-rendering: optimizeLegibility;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-Thin.eot');
+    src: url('../fonts/Rebeqa-Thin.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-Thin.woff2') format('woff2'),
+         url('../fonts/Rebeqa-Thin.woff') format('woff'),
+         url('../fonts/Rebeqa-Thin.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-ThinItalic.eot'); 
+    src: url('../fonts/Rebeqa-ThinItalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-ThinItalic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-ThinItalic.woff') format('woff'),
+         url('../fonts/Rebeqa-ThinItalic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 100;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-ExtraLight.eot');
+    src: url('../fonts/Rebeqa-ExtraLight.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-ExtraLight.woff2') format('woff2'),
+         url('../fonts/Rebeqa-ExtraLight.woff') format('woff'),
+         url('../fonts/Rebeqa-ExtraLight.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-ExtraLightItalic.eot');
+    src: url('../fonts/Rebeqa-ExtraLightItalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-ExtraLightItalic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-ExtraLightItalic.woff') format('woff'),
+         url('../fonts/Rebeqa-ExtraLightItalic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 200;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-Light.eot');
+    src: url('../fonts/Rebeqa-Light.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-Light.woff2') format('woff2'),
+         url('../fonts/Rebeqa-Light.woff') format('woff'),
+         url('../fonts/Rebeqa-Light.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-LightItalic.eot');
+    src: url('../fonts/Rebeqa-LightItalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-LightItalic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-LightItalic.woff') format('woff'),
+         url('../fonts/Rebeqa-LightItalic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 300;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-Regular.eot');
+    src: url('../fonts/Rebeqa-Regular.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-Regular.woff2') format('woff2'),
+         url('../fonts/Rebeqa-Regular.woff') format('woff'),
+         url('../fonts/Rebeqa-Regular.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-Italic.eot');
+    src: url('../fonts/Rebeqa-Italic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-Italic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-Italic.woff') format('woff'),
+         url('../fonts/Rebeqa-Italic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 400;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-Medium.eot');
+    src: url('../fonts/Rebeqa-Medium.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-Medium.woff2') format('woff2'),
+         url('../fonts/Rebeqa-Medium.woff') format('woff'),
+         url('../fonts/Rebeqa-Medium.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-MediumItalic.eot');
+    src: url('../fonts/Rebeqa-MediumItalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-MediumItalic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-MediumItalic.woff') format('woff'),
+         url('../fonts/Rebeqa-MediumItalic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 500;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-SemiBold.eot');
+    src: url('../fonts/Rebeqa-SemiBold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-SemiBold.woff2') format('woff2'),
+         url('../fonts/Rebeqa-SemiBold.woff') format('woff'),
+         url('../fonts/Rebeqa-SemiBold.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-SemiBoldItalic.eot');
+    src: url('../fonts/Rebeqa-SemiBoldItalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-SemiBoldItalic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-SemiBoldItalic.woff') format('woff'),
+         url('../fonts/Rebeqa-SemiBoldItalic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 600;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-Bold.eot');
+    src: url('../fonts/Rebeqa-Bold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-Bold.woff2') format('woff2'),
+         url('../fonts/Rebeqa-Bold.woff') format('woff'),
+         url('../fonts/Rebeqa-Bold.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-BoldItalic.eot');
+    src: url('../fonts/Rebeqa-BoldItalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-BoldItalic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-BoldItalic.woff') format('woff'),
+         url('../fonts/Rebeqa-BoldItalic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 700;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-ExtraBold.eot');
+    src: url('../fonts/Rebeqa-ExtraBold.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-ExtraBold.woff2') format('woff2'),
+         url('../fonts/Rebeqa-ExtraBold.woff') format('woff'),
+         url('../fonts/Rebeqa-ExtraBold.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-ExtraBoldItalic.eot');
+    src: url('../fonts/Rebeqa-ExtraBoldItalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-ExtraBoldItalic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-ExtraBoldItalic.woff') format('woff'),
+         url('../fonts/Rebeqa-ExtraBoldItalic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 800;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-Black.eot');
+    src: url('../fonts/Rebeqa-Black.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-Black.woff2') format('woff2'),
+         url('../fonts/Rebeqa-Black.woff') format('woff'),
+         url('../fonts/Rebeqa-Black.ttf') format('truetype');
+    font-style: normal;
+    font-weight: 900;
+}
+
+@font-face {
+    font-family: 'Rebeqa';
+    src: url('../fonts/Rebeqa-BlackItalic.eot');
+    src: url('../fonts/Rebeqa-BlackItalic.eot?#iefix') format('embedded-opentype'),
+         url('../fonts/Rebeqa-BlackItalic.woff2') format('woff2'),
+         url('../fonts/Rebeqa-BlackItalic.woff') format('woff'),
+         url('../fonts/Rebeqa-BlackItalic.ttf') format('truetype');
+    font-style: italic;
+    font-weight: 900;
+}
