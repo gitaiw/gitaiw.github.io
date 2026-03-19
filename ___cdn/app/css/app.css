@@ -216,7 +216,6 @@ body {
     overflow-wrap: break-word;
     -webkit-tap-highlight-color: transparent;
     font-kerning: normal;
-    overscroll-behavior: none;
 }
 
 /* =========================
