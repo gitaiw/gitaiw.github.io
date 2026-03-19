@@ -400,18 +400,27 @@ document.addEventListener("DOMContentLoaded", () => {
 
   pembungkus.addEventListener("touchmove", (e) => {
 
-  if (e.touches.length > 1) return;
+    if (e.touches.length > 1) return;
+
+    const sentuhY = e.touches[0].clientY;
+    const delta = sentuhAwal - sentuhY;
+
+    const diAtas = pembungkus.scrollTop <= 2;
+    const tarikKeBawah = delta < 0;
+
+    if (diAtas && tarikKeBawah) {
+      return;
+    }
 
     e.preventDefault();
     scrollAktif();
 
-    const sentuhY = e.touches[0].clientY;
-    const delta = sentuhAwal - sentuhY;
     sentuhAwal = sentuhY;
 
     sasaran += delta * 2;
     const maxScroll = pembungkus.scrollHeight - pembungkus.clientHeight;
     sasaran = Math.max(0, Math.min(sasaran, maxScroll));
+
   }, { passive: false });
 
   function scrollHalus() {
@@ -428,9 +437,7 @@ document.addEventListener("DOMContentLoaded", () => {
       const durasi = Date.now() - waktuSentuh;
 
       if (durasi > 200) {
-
         const faktorFade = Math.exp(-(durasi - 200) / 500);
-
         jitter *= faktorFade;
       }
     }
