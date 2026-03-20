@@ -5,6 +5,20 @@
  *
 ====================
  */
+
+  .textSramble {
+    position: relative;
+  }
+
+  .textSramble .thisReal {
+    visibility: hidden;
+  }
+
+  .textSramble .thisFake {
+    position: absolute;
+    inset: 0;
+    white-space: pre-wrap;
+  }
   ._marquee {
     width: 100%;
     overflow: hidden;
