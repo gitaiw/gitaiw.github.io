@@ -1090,121 +1090,87 @@ new _marqueeWithDelimiterAlways('._marquee-kanan', {
  */
 
 (function(){
+
 document.addEventListener("DOMContentLoaded", () => {
 
-const chars = "█▓▒░<>/[]{}—=#&";
+  const chars = "█▓▒░<>/[]{}—=#&";
+  const duration = 1200;
+  const charLength = chars.length;
 
-const duration = 1200; 
-const lineDelay = 100;
+  const elements = document.querySelectorAll(".textSramble");
+  if (!elements.length) return;
 
-function splitLines(el) {
-  const text = el.dataset.original || el.textContent.trim();
-  const words = text.split(" ");
+  elements.forEach(el => {
+    if (!el) return;
 
-  el.innerHTML = "";
+    const text = el.textContent.trim();
+    if (!text) return;
 
-  let line = document.createElement("div");
-  el.appendChild(line);
+    el.textContent = "";
 
-  words.forEach(word => {
-    const span = document.createElement("span");
-    span.textContent = word + " ";
-    line.appendChild(span);
+    const thisReal = document.createElement("span");
+    thisReal.className = "thisReal";
+    thisReal.textContent = text;
 
-    if (line.children.length > 1) {
-      const top1 = line.children[0].offsetTop;
-      const top2 = span.offsetTop;
+    const thisFake = document.createElement("span");
+    thisFake.className = "thisFake";
+    thisFake.textContent = text;
 
-      if (top2 > top1) {
-        line.removeChild(span);
-        line = document.createElement("div");
-        el.appendChild(line);
-        line.appendChild(span);
+    el.appendChild(thisReal);
+    el.appendChild(thisFake);
+  });
+
+  function scramble(el) {
+    if (!el) return;
+
+    const layer = el.querySelector(".thisFake");
+    if (!layer) return;
+
+    if (layer.dataset.running) return;
+    layer.dataset.running = "true";
+
+    const original = layer.textContent;
+    let start = null;
+
+    function frame(t) {
+      if (!start) start = t;
+
+      const elapsed = t - start;
+      const progress = Math.floor((elapsed / duration) * original.length);
+
+      let result = "";
+
+      for (let i = 0; i < original.length; i++) {
+        result += (i < progress)
+          ? original[i]
+          : chars[Math.floor(Math.random() * charLength)];
+      }
+
+      layer.textContent = result;
+
+      if (elapsed < duration) {
+        requestAnimationFrame(frame);
+      } else {
+        layer.textContent = original;
+        delete layer.dataset.running;
       }
     }
-  });
 
-  return el.querySelectorAll("div");
-}
-
-function scrambleLine(el, text) {
-  let start = null;
-
-  function frame(timestamp) {
-    if (!start) start = timestamp;
-
-    const elapsed = timestamp - start;
-    const progress = Math.floor((elapsed / duration) * text.length);
-
-    let result = "";
-
-    for (let i = 0; i < text.length; i++) {
-      result += (i < progress)
-        ? text[i]
-        : chars[Math.floor(Math.random() * chars.length)];
-    }
-
-    el.textContent = result;
-
-    if (elapsed < duration) {
-      requestAnimationFrame(frame);
-    } else {
-      el.textContent = text;
-    }
+    requestAnimationFrame(frame);
   }
 
-  requestAnimationFrame(frame);
-}
+  const observer = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if (e && e.isIntersecting && e.target) {
+        scramble(e.target);
+      }
+    });
+  }, { threshold: 0.4 });
 
-function runScramble(el) {
-  if (el.dataset.running === "true") return;
-
-  el.dataset.running = "true";
-
-  if (!el.dataset.original) {
-    el.dataset.original = el.textContent.trim();
-  }
-
-  el.innerHTML = el.dataset.original;
-
-  const lines = splitLines(el);
-
-  lines.forEach((line, i) => {
-    setTimeout(() => {
-      scrambleLine(line, line.textContent);
-    }, i * lineDelay);
+  elements.forEach(el => {
+    if (el) observer.observe(el);
   });
 
-  setTimeout(() => {
-    el.dataset.running = "false";
-  }, duration + (lines.length * lineDelay) + 200);
-}
-
-window.addEventListener("orientationchange", () => {
-  document.querySelectorAll(".textSramble").forEach(el => {
-
-    const text = el.dataset.original || el.textContent.trim();
-    el.textContent = text;
-  });
 });
 
-window.addEventListener("resize", () => {
-  document.querySelectorAll(".textSramble").forEach(el => {
-    el.dataset.split = "false";
-  });
-});
-
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      runScramble(entry.target);
-    }
-  });
-}, { threshold: 0.4 });
-
-document.querySelectorAll(".textSramble").forEach(el => {
-  observer.observe(el);
-});
-
-});
 })();
