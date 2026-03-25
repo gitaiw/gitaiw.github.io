@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="id"><!-- tidak ada licensee bebas publik -->
+<html lang="id">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -229,9 +229,9 @@
 
     <div id="game"></div>
 
-    <audio id="bgm" src="sounds/loop.mp3" loop preload="auto"></audio>
-    <audio id="matchSound" src="sounds/match.mp3" preload="auto"></audio>
-    <audio id="swapSound" src="sounds/swap.mp3" preload="auto"></audio>
+    <audio id="bgm" src="/___cdn/app/sounds/loop.mp3" loop preload="auto"></audio>
+    <audio id="matchSound" src="/___cdn/app/sounds/match.mp3" preload="auto"></audio>
+    <audio id="swapSound" src="/___cdn/app/sounds/swap.mp3" preload="auto"></audio>
 
     <div style="
   position: absolute;
@@ -266,11 +266,11 @@
     const rows = 8;
 
     const candies = [
-      "img/c1.png",
-      "img/c2.png",
-      "img/c3.png",
-      "img/c4.png",
-      "img/c5.png"
+      "/___cdn/app/img/c1.png",
+      "/___cdn/app/img/c2.png",
+      "/___cdn/app/img/c3.png",
+      "/___cdn/app/img/c4.png",
+      "/___cdn/app/img/c5.png"
     ];
 
     const game = document.getElementById("game");
