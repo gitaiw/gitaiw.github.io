@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="id"><!-- tidak ada licensee bebas publik -->
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Permainan Match 3</title>
+<meta name="description" content="Mainkan game Match-3 seru dengan gameplay sederhana dan ringan. Cocok untuk semua usia.">
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial;
+      background: #fff;
+      color: #000;
+      text-align: center;
+      overflow: hidden;
+    }
+
+    .circle-left {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #ff9a9e, #fad0c4);
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+    }
+
+    .circle-right {
+      position: absolute;
+      top: 0;
+      right: 0;
+      width: 300px;
+      height: 300px;
+      background: radial-gradient(circle, #a18cd1, #fbc2eb);
+      border-radius: 50%;
+      filter: blur(100px);
+      z-index: 0;
+    }
+
+    h2 {
+      margin: 15px;
+    }
+
+    .section {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+      min-height: 100vh;
+      min-height: 100dvh;
+      padding: 10px;
+      box-sizing: border-box;
+      overflow: hidden;
+    }
+
+    #game {
+      position: relative;
+      display: grid;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 6px;
+      width: min(90vw, 60vh);
+      max-width: 420px;
+      margin: auto;
+    }
+
+    .tile {
+      aspect-ratio: 1/1;
+      border-radius: 12px;
+      padding: 4px;
+      background: transparent;
+    }
+
+    .inner {
+      width: 100%;
+      height: 100%;
+      border-radius: 8px;
+      transition: transform .3s cubic-bezier(.2, .8, .2, 1), opacity .2s;
+    }
+
+    .fade {
+      opacity: 0;
+      transform: scale(0.5);
+    }
+
+    .particle {
+      position: absolute;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 999;
+      width: 8px;
+      height: 8px;
+      background: #fff;
+      animation: explode 0.6s ease-out forwards;
+    }
+
+    @keyframes explode {
+      from {
+        transform: translate(0, 0) scale(1);
+        opacity: 1;
+      }
+
+      to {
+        transform: translate(var(--x), var(--y)) scale(0.3);
+        opacity: 0;
+      }
+    }
+
+    #overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.85);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease;
+    }
+
+    .modal {
+      text-align: center;
+      background: #ccc;
+      padding: 40px;
+      border-radius: 15px;
+      box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+    }
+
+    #startBtn {
+      padding: 15px 30px;
+      font-size: 20px;
+      cursor: pointer;
+      background-color: #ff4757;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+    }
+
+    #startBtn:hover {
+      background-color: #ff6b81;
+      transform: scale(1.05);
+    }
+
+    .mute-icon {
+      position: absolue;
+      top: 5%;
+      right: 5%;
+    }
+
+    .mute-icon svg {
+      width: 26px;
+      height: 26px;
+      fill: black;
+    }
+
+    .inner {
+      animation: idleWiggle 2s ease-in-out infinite;
+    }
+
+    @keyframes idleWiggle {
+      0% {
+        transform: rotate(0deg) scale(1);
+      }
+
+      25% {
+        transform: rotate(1.5deg) scale(1.03);
+      }
+
+      50% {
+        transform: rotate(0deg) scale(1);
+      }
+
+      75% {
+        transform: rotate(-1.5deg) scale(1.03);
+      }
+
+      100% {
+        transform: rotate(0deg) scale(1);
+      }
+    }
+
+    /*.comboText {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      font-size: 24px;
+      font-weight: bold;
+      color: yellow;
+      text-shadow: 0 0 10px orange;
+      animation: pop 0.8s ease;
+    }
+
+    @keyframes pop {
+      0% {
+        transform: translate(-50%, -50%) scale(0.5);
+        opacity: 0;
+      }
+
+      50% {
+        transform: translate(-50%, -50%) scale(1.2);
+        opacity: 1;
+      }
+
+      100% {
+        transform: translate(-50%, -60%) scale(1);
+        opacity: 0;
+      }
+    }*/
+  </style>
+</head>
+
+<body>
+  <div id="overlay">
+    <div class="modal">
+      <h2>Permainan Sederhana</h2>
+      <button id="startBtn">Mulai Game</button>
+    </div>
+  </div>
+
+  <section class="section">
+    <div class="circle-left"></div>
+    <div class="circle-right"></div>
+
+    <div id="game"></div>
+
+    <audio id="bgm" src="sounds/loop.mp3" loop preload="auto"></audio>
+    <audio id="matchSound" src="sounds/match.mp3" preload="auto"></audio>
+    <audio id="swapSound" src="sounds/swap.mp3" preload="auto"></audio>
+
+    <div style="
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  box-sizing: border-box;
+">
+      <div id="score">Score: 0</div>
+      <button id="muteBtn" class="mute-icon">
+
+        <svg id="iconSoundOn" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+          <path d="M3 9v6h4l5 5V4L7 9H3z" />
+          <path d="M14 3.23v2.06c2.89 1 5 3.77 5 6.71s-2.11 5.71-5 6.71v2.06c4.01-1.09 7-4.71 7-8.77s-2.99-7.68-7-8.77z" />
+        </svg>
+
+        <svg id="iconSoundOff" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" style="display:none;">
+          <path d="M4.27 3L3 4.27 7.73 9H3v6h4l5 5v-6.73l4.73 4.73L21 19.73 4.27 3z" />
+        </svg>
+
+      </button>
+
+    </div>
+  </section>
+
+  <script>
+    const cols = 6;
+    const rows = 8;
+
+    const candies = [
+      "img/c1.png",
+      "img/c2.png",
+      "img/c3.png",
+      "img/c4.png",
+      "img/c5.png"
+    ];
+
+    const game = document.getElementById("game");
+    const scoreEl = document.getElementById("score");
+
+    const bgm = document.getElementById('bgm');
+    const matchSound = document.getElementById("matchSound");
+    const swapSound = document.getElementById("swapSound");
+
+    const overlay = document.getElementById('overlay');
+    const startBtn = document.getElementById('startBtn');
+    const muteBtn = document.getElementById('muteBtn');
+    const iconOn = document.getElementById("iconSoundOn");
+    const iconOff = document.getElementById("iconSoundOff");
+
+    let board = [];
+    let startX, startY, activeTile;
+    let animating = false;
+    let score = 0;
+
+    startBtn.onclick = () => {
+      bgm.play().catch(() => {});
+      overlay.style.display = 'none';
+    };
+
+    muteBtn.onclick = () => {
+      bgm.muted = !bgm.muted;
+
+      iconOn.style.display = bgm.muted ? "none" : "block";
+      iconOff.style.display = bgm.muted ? "block" : "none";
+    };
+
+    function createBoard() {
+      for (let i = 0; i < cols * rows; i++) {
+        let t = document.createElement("div");
+        t.className = "tile";
+        t.dataset.id = i;
+
+        let inner = document.createElement("div");
+        inner.className = "inner";
+
+        setColor(inner);
+        t.appendChild(inner);
+        addEvents(t);
+
+        game.appendChild(t);
+        board.push(t);
+      }
+    }
+
+    function addEvents(t) {
+      t.addEventListener("touchstart", startDrag);
+      t.addEventListener("touchmove", moveDrag);
+      t.addEventListener("touchend", endDrag);
+
+      t.addEventListener("mousedown", startDrag);
+      t.addEventListener("mousemove", moveDrag);
+      t.addEventListener("mouseup", endDrag);
+    }
+
+    function setColor(el) {
+      const img = candies[Math.floor(Math.random() * candies.length)];
+      el.style.background = `url(${img}) center/cover no-repeat`;
+    }
+
+    function startDrag(e) {
+      if (animating) return;
+
+      const touch = e.touches ? e.touches[0] : e;
+      startX = touch.clientX;
+      startY = touch.clientY;
+      activeTile = this;
+    }
+
+    function moveDrag(e) {
+      if (!activeTile || animating) return;
+
+      const touch = e.touches ? e.touches[0] : e;
+      let dx = touch.clientX - startX;
+      let dy = touch.clientY - startY;
+
+      let id = +activeTile.dataset.id;
+      let row = Math.floor(id / cols);
+      let col = id % cols;
+
+      let target = null;
+      let threshold = 25;
+
+      if (Math.abs(dx) > Math.abs(dy)) {
+        if (dx > threshold && col < cols - 1) target = board[id + 1];
+        if (dx < -threshold && col > 0) target = board[id - 1];
+      } else {
+        if (dy > threshold && row < rows - 1) target = board[id + cols];
+        if (dy < -threshold && row > 0) target = board[id - cols];
+      }
+
+      if (target) {
+        swapAction(activeTile, target);
+        activeTile = null;
+      }
+    }
+
+    function endDrag() {
+      activeTile = null;
+    }
+
+    function swapAction(a, b) {
+      animating = true;
+
+      playSound(swapSound);
+      animateSwap(a, b);
+
+      setTimeout(() => {
+        swapColor(a, b);
+
+        if (!checkMatch()) {
+          animateSwap(a, b);
+          setTimeout(() => swapColor(a, b), 150);
+        }
+
+        animating = false;
+      }, 150);
+    }
+
+    function swapColor(a, b) {
+      let tmp = a.firstChild.style.backgroundImage;
+      a.firstChild.style.backgroundImage = b.firstChild.style.backgroundImage;
+      b.firstChild.style.backgroundImage = tmp;
+    }
+
+    function animateSwap(a, b) {
+      const aInner = a.firstChild;
+      const bInner = b.firstChild;
+
+      aInner.style.animation = "none";
+      bInner.style.animation = "none";
+
+      aInner.offsetHeight;
+
+      aInner.style.transform = "scale(1.2)";
+      bInner.style.transform = "scale(1.2)";
+
+      setTimeout(() => {
+
+        aInner.style.transform = "";
+        bInner.style.transform = "";
+
+        aInner.style.animation = "";
+        bInner.style.animation = "";
+      }, 150);
+    }
+
+    function checkMatch() {
+      let toRemove = new Set();
+
+      for (let i = 0; i < cols * rows; i++) {
+        let current = board[i].firstChild.style.backgroundImage;
+
+        // horizontal
+        if (i % cols <= cols - 3) {
+          if (current &&
+            board[i + 1].firstChild.style.backgroundImage === current &&
+            board[i + 2].firstChild.style.backgroundImage === current) {
+            toRemove.add(i);
+            toRemove.add(i + 1);
+            toRemove.add(i + 2);
+          }
+        }
+
+        if (i < cols * (rows - 2)) {
+          if (current &&
+            board[i + cols].firstChild.style.backgroundImage === current &&
+            board[i + 2 * cols].firstChild.style.backgroundImage === current) {
+            toRemove.add(i);
+            toRemove.add(i + cols);
+            toRemove.add(i + 2 * cols);
+          }
+        }
+      }
+
+      if (toRemove.size) {
+        playSound(matchSound);
+
+        toRemove.forEach(i => {
+          explodeEffect(board[i]);
+          board[i].firstChild.classList.add("fade");
+        });
+
+        setTimeout(() => {
+          toRemove.forEach(i => {
+            board[i].firstChild.style.backgroundImage = "";
+            board[i].firstChild.classList.remove("fade");
+          });
+
+          score += toRemove.size;
+          updateScore();
+
+          gravity();
+        }, 200);
+
+        return true;
+      }
+
+      return false;
+    }
+
+    function gravity() {
+      let tileSize = board[0].offsetHeight + 6;
+
+      for (let col = 0; col < cols; col++) {
+        let empty = [];
+
+        for (let row = rows - 1; row >= 0; row--) {
+          let i = row * cols + col;
+
+          if (!board[i].firstChild.style.backgroundImage) {
+            empty.push(i);
+          } else if (empty.length) {
+            let target = empty.shift();
+
+            board[target].firstChild.style.backgroundImage =
+              board[i].firstChild.style.backgroundImage;
+
+            board[i].firstChild.style.backgroundImage = "";
+            empty.push(i);
+          }
+        }
+
+        empty.forEach(i => {
+          setColor(board[i].firstChild);
+        });
+      }
+
+      setTimeout(checkMatch, 200);
+    }
+
+    function explodeEffect(tile) {
+      let rect = tile.getBoundingClientRect();
+      let gameRect = game.getBoundingClientRect();
+
+      let cx = rect.left - gameRect.left + rect.width / 2;
+      let cy = rect.top - gameRect.top + rect.height / 2;
+
+      for (let i = 0; i < 20; i++) {
+        let p = document.createElement("div");
+        p.className = "particle";
+
+        let hue = Math.random() * 360;
+        p.style.background = `hsl(${hue}, 100%, 60%)`;
+
+        let angle = Math.random() * Math.PI * 2;
+        let dist = 40 + Math.random() * 60;
+
+        p.style.left = cx + "px";
+        p.style.top = cy + "px";
+
+        p.style.setProperty("--x", Math.cos(angle) * dist + "px");
+        p.style.setProperty("--y", Math.sin(angle) * dist + "px");
+
+        let size = 6 + Math.random() * 6;
+        p.style.width = size + "px";
+        p.style.height = size + "px";
+
+        game.appendChild(p);
+
+        setTimeout(() => p.remove(), 600);
+      }
+    }
+
+    function playSound(s) {
+      if (!s) return;
+      s.currentTime = 0;
+      s.play().catch(() => {});
+    }
+
+    function updateScore() {
+      scoreEl.innerText = "Score: " + score;
+    }
+
+    createBoard();
+    setTimeout(checkMatch, 100);
+  </script>
+
+</body>
+</html>
