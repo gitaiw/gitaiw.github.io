@@ -357,7 +357,7 @@ document.addEventListener("DOMContentLoaded", () => {
 /*
 ====================
  * 
- * SCROLL ANTI BAR BROWSER HILANG
+ * SCROLL
  * 
 ====================
  */
@@ -422,6 +422,35 @@ document.addEventListener("DOMContentLoaded", () => {
     sasaran = Math.max(0, Math.min(sasaran, maxScroll));
 
   }, { passive: false });
+
+  document.addEventListener("keydown", (e) => {
+    const maxScroll = pembungkus.scrollHeight - pembungkus.clientHeight;
+
+    let step = 120;
+
+    if (e.key === "ArrowDown") {
+      sasaran += step;
+    } else if (e.key === "ArrowUp") {
+      sasaran -= step;
+    } else if (e.key === "PageDown") {
+      sasaran += pembungkus.clientHeight;
+    } else if (e.key === "PageUp") {
+      sasaran -= pembungkus.clientHeight;
+    } else if (e.key === "Home") {
+      sasaran = 0;
+    } else if (e.key === "End") {
+      sasaran = maxScroll;
+    } else if (e.key === " ") {
+      sasaran += pembungkus.clientHeight * 0.8;
+    } else {
+      return;
+    }
+
+    e.preventDefault();
+    scrollAktif();
+
+    sasaran = Math.max(0, Math.min(sasaran, maxScroll));
+  });
 
   function scrollHalus() {
     let selisih = sasaran - posisiSaatIni;
