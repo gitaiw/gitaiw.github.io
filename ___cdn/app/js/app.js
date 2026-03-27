@@ -399,7 +399,6 @@ document.addEventListener("DOMContentLoaded", () => {
   }, { passive: false });
 
   pembungkus.addEventListener("touchmove", (e) => {
-
     if (e.touches.length > 1) return;
 
     const sentuhY = e.touches[0].clientY;
@@ -407,48 +406,32 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const diAtas = pembungkus.scrollTop <= 2;
     const tarikKeBawah = delta < 0;
-
-    if (diAtas && tarikKeBawah) {
-      return;
-    }
+    if (diAtas && tarikKeBawah) return;
 
     e.preventDefault();
     scrollAktif();
-
     sentuhAwal = sentuhY;
 
     sasaran += delta * 2;
     const maxScroll = pembungkus.scrollHeight - pembungkus.clientHeight;
     sasaran = Math.max(0, Math.min(sasaran, maxScroll));
-
   }, { passive: false });
 
   document.addEventListener("keydown", (e) => {
     const maxScroll = pembungkus.scrollHeight - pembungkus.clientHeight;
-
     let step = 120;
 
-    if (e.key === "ArrowDown") {
-      sasaran += step;
-    } else if (e.key === "ArrowUp") {
-      sasaran -= step;
-    } else if (e.key === "PageDown") {
-      sasaran += pembungkus.clientHeight;
-    } else if (e.key === "PageUp") {
-      sasaran -= pembungkus.clientHeight;
-    } else if (e.key === "Home") {
-      sasaran = 0;
-    } else if (e.key === "End") {
-      sasaran = maxScroll;
-    } else if (e.key === " ") {
-      sasaran += pembungkus.clientHeight * 0.8;
-    } else {
-      return;
-    }
+    if (e.key === "ArrowDown") sasaran += step;
+    else if (e.key === "ArrowUp") sasaran -= step;
+    else if (e.key === "PageDown") sasaran += pembungkus.clientHeight;
+    else if (e.key === "PageUp") sasaran -= pembungkus.clientHeight;
+    else if (e.key === "Home") sasaran = 0;
+    else if (e.key === "End") sasaran = maxScroll;
+    else if (e.key === " ") sasaran += pembungkus.clientHeight * 0.8;
+    else return;
 
     e.preventDefault();
     scrollAktif();
-
     sasaran = Math.max(0, Math.min(sasaran, maxScroll));
   });
 
@@ -464,7 +447,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
     if (waktuSentuh > 0) {
       const durasi = Date.now() - waktuSentuh;
-
       if (durasi > 200) {
         const faktorFade = Math.exp(-(durasi - 200) / 500);
         jitter *= faktorFade;
