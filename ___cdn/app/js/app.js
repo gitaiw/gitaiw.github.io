@@ -374,6 +374,8 @@ document.addEventListener("DOMContentLoaded", () => {
   let sedangScroll = false;
   let timerScroll;
 
+  let inputMode = "wheel";
+
   function scrollAktif() {
     sedangScroll = true;
     clearTimeout(timerScroll);
@@ -382,18 +384,26 @@ document.addEventListener("DOMContentLoaded", () => {
     }, 80);
   }
 
-  pembungkus.addEventListener("wheel", (e) => {
-    e.preventDefault();
-    scrollAktif();
-    sasaran += e.deltaY * 0.6;
+  function clampScroll() {
     const maxScroll = pembungkus.scrollHeight - pembungkus.clientHeight;
     sasaran = Math.max(0, Math.min(sasaran, maxScroll));
+  }
+
+  pembungkus.addEventListener("wheel", (e) => {
+    inputMode = "wheel";
+
+    e.preventDefault();
+    scrollAktif();
+
+    sasaran += e.deltaY * 0.6;
+    clampScroll();
   }, { passive: false });
 
   let waktuSentuh = 0;
   let sentuhAwal = 0;
 
   pembungkus.addEventListener("touchstart", (e) => {
+    inputMode = "touch";
     sentuhAwal = e.touches[0].clientY;
     waktuSentuh = Date.now();
   }, { passive: false });
@@ -406,33 +416,62 @@ document.addEventListener("DOMContentLoaded", () => {
 
     const diAtas = pembungkus.scrollTop <= 2;
     const tarikKeBawah = delta < 0;
+
     if (diAtas && tarikKeBawah) return;
 
     e.preventDefault();
     scrollAktif();
+
     sentuhAwal = sentuhY;
 
     sasaran += delta * 2;
-    const maxScroll = pembungkus.scrollHeight - pembungkus.clientHeight;
-    sasaran = Math.max(0, Math.min(sasaran, maxScroll));
+    clampScroll();
+
   }, { passive: false });
 
+  pembungkus.addEventListener("touchend", () => {
+    waktuSentuh = 0;
+  });
+
   document.addEventListener("keydown", (e) => {
-    const maxScroll = pembungkus.scrollHeight - pembungkus.clientHeight;
-    let step = 120;
+    inputMode = "keyboard";
 
-    if (e.key === "ArrowDown") sasaran += step;
-    else if (e.key === "ArrowUp") sasaran -= step;
-    else if (e.key === "PageDown") sasaran += pembungkus.clientHeight;
-    else if (e.key === "PageUp") sasaran -= pembungkus.clientHeight;
-    else if (e.key === "Home") sasaran = 0;
-    else if (e.key === "End") sasaran = maxScroll;
-    else if (e.key === " ") sasaran += pembungkus.clientHeight * 0.8;
-    else return;
+    const viewHeight = pembungkus.clientHeight;
+    const step = 80;
 
-    e.preventDefault();
+    switch (e.key) {
+      case "ArrowDown":
+        sasaran += step;
+        break;
+      case "ArrowUp":
+        sasaran -= step;
+        break;
+      case "PageDown":
+        sasaran += viewHeight * 0.9;
+        break;
+      case "PageUp":
+        sasaran -= viewHeight * 0.9;
+        break;
+      case " ":
+        if (e.shiftKey) {
+          sasaran -= viewHeight * 0.9;
+        } else {
+          sasaran += viewHeight * 0.9;
+        }
+        break;
+      case "Home":
+        sasaran = 0;
+        break;
+      case "End":
+        sasaran = pembungkus.scrollHeight;
+        break;
+      default:
+        return;
+    }
+
     scrollAktif();
-    sasaran = Math.max(0, Math.min(sasaran, maxScroll));
+    clampScroll();
+    e.preventDefault();
   });
 
   function scrollHalus() {
@@ -441,12 +480,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     let jitter = 0;
 
-    if (sedangScroll && Math.abs(selisih) > ambangGetar) {
+    if (
+      inputMode === "touch" &&
+      sedangScroll &&
+      Math.abs(selisih) > ambangGetar
+    ) {
       jitter = (Math.random() - 0.5) * intensitasGetar;
     }
 
     if (waktuSentuh > 0) {
       const durasi = Date.now() - waktuSentuh;
+
       if (durasi > 200) {
         const faktorFade = Math.exp(-(durasi - 200) / 500);
         jitter *= faktorFade;
@@ -454,12 +498,9 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 
     pembungkus.scrollTop = posisiSaatIni + jitter;
+
     requestAnimationFrame(scrollHalus);
   }
 
   scrollHalus();
-
-  pembungkus.addEventListener("touchend", () => {
-    waktuSentuh = 0;
-  });
 });
